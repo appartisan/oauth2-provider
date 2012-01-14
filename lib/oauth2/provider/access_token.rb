@@ -45,14 +45,17 @@ module OAuth2
     private
       
       def authorize!(access_token, error)
-        return unless @authorization = Model.find_access_token(access_token)
+         @authorization = Model.find_access_token(access_token)
+        return if !@authorization || @authorization.access_token_expired?
         @authorization.update_attribute(:access_token, nil) if error
+        @authorization.update_attribute(:access_token_expires_at, nil) if error
+
       end
       
       def validate!
         return @error = ''                 unless @access_token
         return @error = INVALID_TOKEN      unless @authorization
-        return @error = EXPIRED_TOKEN      if @authorization.expired?
+        return @error = EXPIRED_TOKEN      if @authorization.expired? || @authorization.access_token_expired?
         return @error = INSUFFICIENT_SCOPE unless @authorization.in_scope?(@scopes)
         
         if @resource_owner and @authorization.owner != @resource_owner

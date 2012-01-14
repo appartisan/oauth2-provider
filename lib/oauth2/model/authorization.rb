@@ -2,6 +2,8 @@ module OAuth2
   module Model
     
     class Authorization < ActiveRecord::Base
+      
+      ACCESS_TOKEN_TTL = 1.minute
       set_table_name :oauth2_authorizations
       
       belongs_to :oauth2_resource_owner, :polymorphic => true
@@ -77,6 +79,7 @@ module OAuth2
       def exchange!
         self.code          = nil
         self.access_token  = self.class.create_access_token
+        self.access_token_expires_at = Time.now + ACCESS_TOKEN_TTL
         self.refresh_token = self.class.create_refresh_token(self.client)
         self.token_type = "Bearer"
         save!
@@ -89,6 +92,11 @@ module OAuth2
       
       def expires_in
         expires_at && (expires_at - Time.now).ceil
+      end
+      
+      def access_token_expired?
+        return false unless access_token_expires_at
+        access_token_expires_at < Time.now
       end
       
       def generate_code
@@ -107,6 +115,8 @@ module OAuth2
       def scopes
         scope ? scope.split(/\s+/) : []
       end
+      
+
     end
     
   end
