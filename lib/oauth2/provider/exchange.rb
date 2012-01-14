@@ -39,7 +39,7 @@ module OAuth2
         update_authorization
         
         response = {}
-        %w[access_token refresh_token scope].each do |key|
+        %w[access_token token_type refresh_token scope].each do |key|
           value = @authorization.__send__(key)
           response[key] = value if value
         end

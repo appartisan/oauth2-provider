@@ -77,7 +77,8 @@ module OAuth2
       def exchange!
         self.code          = nil
         self.access_token  = self.class.create_access_token
-        self.refresh_token = nil
+        self.refresh_token = self.class.create_refresh_token(self.client)
+        self.token_type = "Bearer"
         save!
       end
       
