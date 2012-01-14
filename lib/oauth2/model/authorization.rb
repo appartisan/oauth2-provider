@@ -3,7 +3,7 @@ module OAuth2
     
     class Authorization < ActiveRecord::Base
       
-      ACCESS_TOKEN_TTL = 1.minute
+      ACCESS_TOKEN_TTL = 60
       set_table_name :oauth2_authorizations
       
       belongs_to :oauth2_resource_owner, :polymorphic => true
@@ -97,6 +97,10 @@ module OAuth2
       def access_token_expired?
         return false unless access_token_expires_at
         access_token_expires_at < Time.now
+      end
+      
+      def access_token_expires_in
+        access_token_expires_at && (access_token_expires_at - Time.now).ceil
       end
       
       def generate_code
