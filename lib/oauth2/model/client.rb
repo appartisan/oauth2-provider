@@ -28,6 +28,7 @@ module OAuth2
       
       def client_secret=(secret)
         @client_secret = secret
+        self.secret = secret
         self.client_secret_hash = BCrypt::Password.create(secret)
       end
       
