@@ -15,7 +15,6 @@ module OAuth2
       validate :check_format_of_redirect_uri
       
       attr_accessible :name, :redirect_uri
-      upload_column :icon, :store_dir => "icons"
       
       before_create :generate_credentials
       
