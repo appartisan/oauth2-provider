@@ -55,10 +55,12 @@ module OAuth2
             instance.code ||= create_code(attributes[:client])
           when TOKEN
             instance.access_token  ||= create_access_token
+            instance.access_token_expires_at = Time.now + ACCESS_TOKEN_TTL
             instance.refresh_token ||= create_refresh_token(attributes[:client])
           when CODE_AND_TOKEN
             instance.code = create_code(attributes[:client])
             instance.access_token  ||= create_access_token
+            instance.access_token_expires_at = Time.now + ACCESS_TOKEN_TTL
             instance.refresh_token ||= create_refresh_token(attributes[:client])
         end
         
