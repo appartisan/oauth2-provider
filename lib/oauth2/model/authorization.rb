@@ -100,7 +100,7 @@ module OAuth2
       end
       
       def access_token_expires_in
-        access_token_expires_at && (access_token_expires_at - Time.now).ceil
+        (access_token_expires_at - Time.now).ceil
       end
       
       def generate_code
