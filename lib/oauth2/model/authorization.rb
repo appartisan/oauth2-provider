@@ -4,7 +4,7 @@ module OAuth2
     class Authorization < ActiveRecord::Base
       # 300 = 5 minutes
       ACCESS_TOKEN_TTL = 300
-      set_table_name :oauth2_authorizations
+      self.table_name = :oauth2_authorizations
       
       belongs_to :oauth2_resource_owner, :polymorphic => true
       alias :owner  :oauth2_resource_owner
