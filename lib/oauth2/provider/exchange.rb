@@ -196,6 +196,12 @@ module OAuth2
           @error = INVALID_GRANT
           @error_description = 'The access grant you supplied is invalid'
         end
+        
+        if @authorization and OAuth2::Model::Authorization.authorization_callback and 
+        !OAuth2::Model::Authorization.authorization_callback.call(@authorization)
+          @error = INVALID_GRANT
+          @error_description = "The access grant you supplied is invalid because the authorization callback returned false."
+        end
       end
     end
     

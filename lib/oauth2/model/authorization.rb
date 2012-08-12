@@ -6,6 +6,15 @@ module OAuth2
       ACCESS_TOKEN_TTL = 300
       self.table_name = :oauth2_authorizations
       
+      class << self
+        #an method that can be custom defined to determine if authorization is still valid
+        # eg. make a remote api call
+        # true = still authorized, false = not authorized
+        # this is checked for refresh_token grant type
+        attr_accessor :authorization_callback
+      end
+      
+      
       belongs_to :oauth2_resource_owner, :polymorphic => true
       alias :owner  :oauth2_resource_owner
       alias :owner= :oauth2_resource_owner=
