@@ -64,7 +64,7 @@ module OAuth2
   
   class Provider
     class << self
-      attr_accessor :realm, :enforce_ssl
+      attr_accessor :realm, :enforce_ssl, :authorization_callback
     end
     
     def self.clear_assertion_handlers!
